@@ -1,8 +1,11 @@
 package com.DEMOJWT.demo.controller;
 
 import com.DEMOJWT.demo.dto.User;
+import com.DEMOJWT.demo.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,14 +18,29 @@ import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("user")
     public User login(@RequestParam("user") String username, @RequestParam("password") String pwd) {
 
-        String token = getJWTToken(username);
+        String token = "Invalid pasword";
         User user = new User();
-        user.setUser(username);
+
+        User userInDB = userRepository.findUserByUserName(username).orElse(user);
+        boolean userExits = !userInDB.equals(user);
+        boolean pwdIsCorrect = userInDB.getPwd().equalsIgnoreCase(pwd);
+        if(userExits && pwdIsCorrect){
+            token = getJWTToken(username);
+            user.setUserName(username);
+
+            user.setPwd(pwd);
+
+
+        }
         user.setToken(token);
+        //userRepository.save(user);
+
         return user;
 
     }
