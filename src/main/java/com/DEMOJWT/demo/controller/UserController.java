@@ -28,22 +28,22 @@ public class UserController {
         User user = new User();
 
         User userInDB = userRepository.findUserByUserName(username).orElse(user);
+
         boolean userExits = !userInDB.equals(user);
         boolean pwdIsCorrect = userInDB.getPwd().equalsIgnoreCase(pwd);
+
         if(userExits && pwdIsCorrect){
             token = getJWTToken(username);
             user.setUserName(username);
-
             user.setPwd(pwd);
-
-
         }
+
         user.setToken(token);
-        //userRepository.save(user);
 
         return user;
 
     }
+
 
     private String getJWTToken(String username) {
         String secretKey = "mySecretKey";
