@@ -1,16 +1,19 @@
 package com.DEMOJWT.demo.dto;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="user")
 public class User {
-    private String user;
+    private String userName;
     private String pwd;
     private String token;
 
-    public String getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPwd() {
