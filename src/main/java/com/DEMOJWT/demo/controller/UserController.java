@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("user")
     public User login(@RequestParam("user") String username, @RequestParam("password") String pwd) {
 
-        String token = "Invalid pasword";
+        String token = "Invalid user";
         User user = new User();
 
         User userInDB = userRepository.findUserByUserName(username).orElse(user);
